@@ -1,0 +1,5 @@
+torch
+torchvision
+h5py
+opencv-python
+tqdm
