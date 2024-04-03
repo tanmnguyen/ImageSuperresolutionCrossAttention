@@ -5,11 +5,11 @@ import configs
 import argparse 
 import torch.optim as optim
 
-from utils.general import get_time
 from utils.batch import collate_fn
 from torch.utils.data import DataLoader
 from dataset import ImageSuperResDataset
 from utils.steps import train_net, valid_net
+from utils.general import get_time, count_params
 from utils.io import logging, plot_learning_curve
 
 from models.VGG import vgg
@@ -48,12 +48,17 @@ def main(args):
         shuffle=False,
     )
 
-    gen = Generator(noRRDBBlock=2).to(configs.device)
+    gen = Generator().to(configs.device)
     disc = Discriminator().to(configs.device)
+
+    logging(f'Generator:\n {gen}', log_file)
+    logging(f'Discriminator:\n {disc}', log_file)
+    logging(f'Device: {configs.device}', log_file)
+    logging(f'Generator Parameters: {count_params(gen)}', log_file)
+    logging(f'Discriminator Parameters: {count_params(disc)}', log_file)
 
     gen_optimizer = optim.Adam(gen.parameters(),lr=0.0002)
     disc_optimizer = optim.Adam(disc.parameters(),lr=0.0002)
-
 
     train_history, valid_history, opt_gen_loss = [], [], float('inf')
     for epoch in range(configs.epochs):
