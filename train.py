@@ -1,4 +1,6 @@
 import os
+import time 
+import torch 
 import configs 
 import argparse 
 import torch.optim as optim
@@ -6,11 +8,19 @@ import torch.optim as optim
 from utils.batch import collate_fn
 from torch.utils.data import DataLoader
 from dataset import ImageSuperResDataset
+from utils.steps import train_net, valid_net
+from utils.io import logging, plot_learning_curve
 
 from models.VGG import vgg
 from models.Generator import Generator
-from utils.metrics.Losses import Losses
 from models.Discriminator import Discriminator
+
+# format time to print month day year hour minute second
+result_dir = os.path.join(configs.result_dir, f"{time.strftime("%m-%d-%Y-%H-%M-%S")}")
+os.makedirs(result_dir, exist_ok=True)
+
+# define log file 
+log_file = os.path.join(result_dir, "log.txt")
 
 def main(args):
     train_dataset = ImageSuperResDataset(
@@ -37,26 +47,34 @@ def main(args):
         shuffle=False,
     )
 
-    gen = Generator().to(configs.device)
+    gen = Generator(noRRDBBlock=2).to(configs.device)
     disc = Discriminator().to(configs.device)
 
     gen_optimizer = optim.Adam(gen.parameters(),lr=0.0002)
     disc_optimizer = optim.Adam(disc.parameters(),lr=0.0002)
 
-    for lr_img, hr_img in train_dataloader:
-        disc_loss, gen_loss = Losses().calculateLoss(
-            disc_optimizer=disc_optimizer, 
-            gen_optimizer=gen_optimizer, 
-            vgg=vgg, 
-            discriminator=disc, 
-            generator=gen, 
-            LR_image=lr_img, 
-            HR_image=hr_img
+
+    train_history, valid_history, opt_gen_loss = [], [], float("inf")
+    for epoch in range(configs.epochs):
+        train_history.append(train_net(train_dataloader, gen_optimizer, disc_optimizer, vgg, disc, gen))
+        logging(
+            f"[Train] Epoch: {epoch + 1}/{configs.epochs} | Disc Loss: {train_history[-1]["disc_loss"]} | Gen Loss: {train_history[-1]["gen_loss"]}",
+            log_file
         )
 
-        print(disc_loss, gen_loss)
-        break
+        valid_history.append(valid_net(valid_dataloader, vgg, disc, gen))
+        logging(
+            f"[Valid] Epoch: {epoch + 1}/{configs.epochs} | Disc Loss: {valid_history[-1]["disc_loss"]} | Gen Loss: {valid_history[-1]["gen_loss"]}\n",
+            log_file
+        )
 
+        if valid_history[-1]["gen_loss"] < opt_gen_loss:
+            opt_gen_loss = valid_history[-1]["gen_loss"]
+            torch.save(gen.state_dict(), os.path.join(result_dir, f"best_gen_ep{epoch}.pth"))
+            torch.save(disc.state_dict(), os.path.join(result_dir, f"best_disc_ep{epoch}.pth"))
+
+    # plot learning curve 
+    plot_learning_curve(train_history, valid_history, result_dir)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='')

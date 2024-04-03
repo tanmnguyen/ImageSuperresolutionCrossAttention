@@ -18,7 +18,7 @@ hr_transform = transforms.Compose([
 ])
 
 def process_image(image):
-   
+    
     return image
 
 def collate_fn(batch):
@@ -26,7 +26,6 @@ def collate_fn(batch):
     lr_images = [hr_transform(item[0]) for item in batch]
     # process high resolution images
     hr_images = [hr_transform(item[1]) for item in batch]
-    
 
     # stack 
     lr_images = torch.stack(lr_images)
