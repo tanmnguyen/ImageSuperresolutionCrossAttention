@@ -21,7 +21,7 @@ result_dir = os.path.join(configs.result_dir, f"{get_time()}")
 os.makedirs(result_dir, exist_ok=True)
 
 # define log file 
-log_file = os.path.join(result_dir, "log.txt")g
+log_file = os.path.join(result_dir, "log.txt")
 
 def main(args):
     train_dataset = ImageSuperResDataset(
