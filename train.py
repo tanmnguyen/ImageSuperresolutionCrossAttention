@@ -5,6 +5,7 @@ import configs
 import argparse 
 import torch.optim as optim
 
+from utils.general import get_time
 from utils.batch import collate_fn
 from torch.utils.data import DataLoader
 from dataset import ImageSuperResDataset
@@ -16,11 +17,11 @@ from models.Generator import Generator
 from models.Discriminator import Discriminator
 
 # format time to print month day year hour minute second
-result_dir = os.path.join(configs.result_dir, f"{time.strftime("%m-%d-%Y-%H-%M-%S")}")
+result_dir = os.path.join(configs.result_dir, f"{get_time()}")
 os.makedirs(result_dir, exist_ok=True)
 
 # define log file 
-log_file = os.path.join(result_dir, "log.txt")
+log_file = os.path.join(result_dir, "log.txt")g
 
 def main(args):
     train_dataset = ImageSuperResDataset(
