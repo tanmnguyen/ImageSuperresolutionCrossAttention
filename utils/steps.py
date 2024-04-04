@@ -30,7 +30,7 @@ def train_net(train_dataloader, gen_optimizer, disc_optimizer, vgg, disc, gen):
 def valid_net(valid_dataloader, vgg, disc, gen):
     disc.eval()
     gen.eval()
-    
+
     epoch_disc_losses, epoch_gen_losses = [], []
     for lr_img, hr_img in tqdm(valid_dataloader):
         with torch.no_grad():
