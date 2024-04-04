@@ -15,8 +15,8 @@ def train_net(train_dataloader, gen_optimizer, disc_optimizer, vgg, disc, gen):
             LR_image=lr_img, 
             HR_image=hr_img
         )
-        epoch_disc_losses.append(disc_loss.detach())
-        epoch_gen_losses.append(gen_loss.detach())
+        epoch_disc_losses.append(disc_loss.detach().cpu())
+        epoch_gen_losses.append(gen_loss.detach().cpu())
 
     return {
         "disc_loss": np.mean(epoch_disc_losses),
@@ -33,8 +33,8 @@ def valid_net(valid_dataloader, vgg, disc, gen):
             LR_image=lr_img, 
             HR_image=hr_img
         )
-        epoch_disc_losses.append(disc_loss.detach())
-        epoch_gen_losses.append(gen_loss.detach())
+        epoch_disc_losses.append(disc_loss.detach().cpu())
+        epoch_gen_losses.append(gen_loss.detach().cpu())
 
     return {
         "disc_loss": np.mean(epoch_disc_losses),
