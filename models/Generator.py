@@ -7,18 +7,17 @@ from .ResidualInResidualDenseBlock import ResidualInResidualDenseBlock
 class Generator(nn.Module):
     def __init__(self,in_channel = 3, out_channel = 3, noRRDBBlock = 23):
         super().__init__()   
-        self.conv1 = nn.Conv2d(3, 64, 3, 1, 1)
+        self.conv1 = nn.Conv2d(in_channel, 64, 3, 1, 1)
 
-        RRDB = ResidualInResidualDenseBlock()
         RRDB_layer = []
-        for i in range(noRRDBBlock):
-            RRDB_layer.append(RRDB)
+        for _ in range(noRRDBBlock):
+            RRDB_layer.append(ResidualInResidualDenseBlock())
         self.RRDB_block =  nn.Sequential(*RRDB_layer)
 
         self.RRDB_conv2 = nn.Conv2d(64, 64, 3, 1, 1)
         self.upconv = nn.Conv2d(64, 64, 3, 1, 1)
 
-        self.out_conv = nn.Conv2d(64, 3, 3, 1, 1)
+        self.out_conv = nn.Conv2d(64, out_channel, 3, 1, 1)
     
     def forward(self, x):
         first_conv = self.conv1(x)
