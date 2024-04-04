@@ -11,7 +11,7 @@ class Discriminator(nn.Module):
         self.resnet.fc = nn.Linear(2048, 1)
 
     def forward(self, x):
-        return self.resnet(x)
+        return torch.sigmoid(self.resnet(x))
     
 # class Discriminator(nn.Module):
 #     def __init__(self):
