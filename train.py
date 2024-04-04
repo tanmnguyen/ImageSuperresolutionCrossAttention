@@ -5,7 +5,7 @@ import configs
 import argparse 
 import torch.optim as optim
 
-from utils.batch import collate_fn
+from utils.batch import BatchHandler
 from torch.utils.data import DataLoader
 from dataset import ImageSuperResDataset
 from utils.steps import train_net, valid_net
@@ -34,17 +34,22 @@ def main(args):
         hr_hdf5_file=os.path.join(args.data, 'hr_valid.hdf5')
     )
 
+    batch_handler = BatchHandler(
+        lr_hdf5_file=os.path.join(args.data, 'lr_train.hdf5'), 
+        hr_hdf5_file=os.path.join(args.data, 'hr_train.hdf5')
+    )
+
     train_dataloader = DataLoader(
         train_dataset, 
         batch_size=configs.batch_size, 
-        collate_fn=collate_fn, 
+        collate_fn=batch_handler.collate_fn, 
         shuffle=True,
     )
 
     valid_dataloader = DataLoader(
         valid_dataset, 
         batch_size=configs.batch_size, 
-        collate_fn=collate_fn, 
+        collate_fn=batch_handler.collate_fn, 
         shuffle=False,
     )
 
