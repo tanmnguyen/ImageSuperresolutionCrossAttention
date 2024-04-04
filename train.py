@@ -82,24 +82,17 @@ def main(args):
         # save models each epoch 
         epoch_dir = os.path.join(result_dir, f'epoch_{epoch}')
         os.makedirs(epoch_dir, exist_ok=True)
-        g
+
         torch.save(gen.state_dict(), os.path.join(epoch_dir, f'gen_ep{epoch}.pth'))
         torch.save(disc.state_dict(), os.path.join(epoch_dir, f'disc_ep{epoch}.pth'))
-
-        # valid_history.append(valid_net(valid_dataloader, vgg, disc, gen))
-        # valid_disc_loss, valid_gen_loss = valid_history[-1]['disc_loss'], valid_history[-1]['gen_loss']
-        # logging(
-        #     f'[Valid] Epoch: {epoch + 1}/{configs.epochs} | Disc Loss: {valid_disc_loss} | Gen Loss: {valid_gen_loss}\n',
-        #     log_file
-        # )
-
-        # if valid_history[-1]['gen_loss'] < opt_gen_loss:
-        #     opt_gen_loss = valid_history[-1]['gen_loss']
-        #     torch.save(gen.state_dict(), os.path.join(result_dir, f'best_gen_ep{epoch}.pth'))
-        #     torch.save(disc.state_dict(), os.path.join(result_dir, f'best_disc_ep{epoch}.pth'))
-
-    # plot learning curve 
-    # plot_learning_curve(train_history, valid_history, result_dir)
+    
+    # valid model in the end 
+    valid_history.append(valid_net(valid_dataloader, vgg, disc, gen))
+    valid_disc_loss, valid_gen_loss = valid_history[-1]['disc_loss'], valid_history[-1]['gen_loss']
+    logging(
+        f'[Valid] Epoch: {epoch + 1}/{configs.epochs} | Disc Loss: {valid_disc_loss} | Gen Loss: {valid_gen_loss}\n',
+        log_file
+    )
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='')
