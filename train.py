@@ -48,7 +48,7 @@ def main(args):
         shuffle=False,
     )
 
-    gen = Generator(noRRDBBlock=2).to(configs.device)
+    gen = Generator().to(configs.device)
     disc = Discriminator().to(configs.device)
 
     logging(f'Generator:\n {gen}', log_file)
@@ -62,12 +62,12 @@ def main(args):
 
     train_history, valid_history, opt_gen_loss = [], [], float('inf')
     for epoch in range(configs.epochs):
-        # train_history.append(train_net(train_dataloader, gen_optimizer, disc_optimizer, vgg, disc, gen))
-        # train_disc_loss, train_gen_loss = train_history[-1]['disc_loss'], train_history[-1]['gen_loss']
-        # logging(
-        #     f'[Train] Epoch: {epoch + 1}/{configs.epochs} | Disc Loss: {train_disc_loss} | Gen Loss: {train_gen_loss}',
-        #     log_file
-        # )
+        train_history.append(train_net(train_dataloader, gen_optimizer, disc_optimizer, vgg, disc, gen))
+        train_disc_loss, train_gen_loss = train_history[-1]['disc_loss'], train_history[-1]['gen_loss']
+        logging(
+            f'[Train] Epoch: {epoch + 1}/{configs.epochs} | Disc Loss: {train_disc_loss} | Gen Loss: {train_gen_loss}',
+            log_file
+        )
 
         valid_history.append(valid_net(valid_dataloader, vgg, disc, gen))
         valid_disc_loss, valid_gen_loss = valid_history[-1]['disc_loss'], valid_history[-1]['gen_loss']
