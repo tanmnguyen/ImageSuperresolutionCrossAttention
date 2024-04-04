@@ -48,7 +48,7 @@ def main(args):
         shuffle=False,
     )
 
-    gen = Generator().to(configs.device)
+    gen = Generator(noRRDBBlock=10).to(configs.device)
     disc = Discriminator().to(configs.device)
 
     logging(f'Generator:\n {gen}', log_file)
