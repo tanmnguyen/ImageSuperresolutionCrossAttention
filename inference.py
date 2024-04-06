@@ -4,7 +4,7 @@ import torch
 import argparse
 
 from utils.batch import BatchHandler
-from models.Generator import Generator
+from models.ESRGan.Generator import Generator
 
 
 def inference(batch_handler, model, img):
@@ -28,10 +28,13 @@ def main(args):
     # read image 
     with h5py.File(args.hdf5, 'r') as f:
         for key in f.keys():
-            img = f[key][()]
-            hr  = inference(batch_handler, model, img)
+            lr = f[key][()]
+            hr  = inference(batch_handler, model, lr)
 
-            cv2.imshow("low res", img)
+            # resize low res image into high res dim
+            lr = cv2.resize(lr, (hr.shape[1], hr.shape[0]), interpolation=cv2.INTER_CUBIC)
+
+            cv2.imshow("low res",  lr)
             cv2.imshow("high res", hr)
             cv2.waitKey(0)
     

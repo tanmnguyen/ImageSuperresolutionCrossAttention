@@ -12,9 +12,9 @@ from utils.steps import train_net, valid_net
 from utils.general import get_time, count_params
 from utils.io import logging, plot_learning_curve
 
-from models.VGG import vgg
-from models.Generator import Generator
-from models.Discriminator import Discriminator
+from models.ESRGan.VGG import vgg
+from models.ESRGan.Generator import Generator
+from models.ESRGan.Discriminator import Discriminator
 
 # format time to print month day year hour minute second
 result_dir = os.path.join(configs.result_dir, f'{get_time()}')
@@ -96,11 +96,6 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='')
-
-    # parser.add_argument('-config',
-    #                     '--config',
-    #                     required=True,
-    #                     help='path to config file')
     
     parser.add_argument('-data',
                         '--data',
