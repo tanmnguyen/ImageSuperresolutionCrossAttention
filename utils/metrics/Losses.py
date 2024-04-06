@@ -20,7 +20,6 @@ class Losses():
 
         disc_optimizer.zero_grad()
         generated_output = generator(LR_image.to(configs.device).float())
-        print("checking-", generated_output.shape)
         fake_data = generated_output.clone()
         fake_label = discriminator(fake_data)
 
