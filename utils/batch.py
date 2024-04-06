@@ -23,6 +23,16 @@ class BatchHandler():
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
 
+    def detransform(self, img):
+        # this function take only 1 image at the time 
+        img = img.squeeze(0)
+        img = img.permute(1, 2, 0)
+        img = img * torch.tensor([0.229, 0.224, 0.225]) + torch.tensor([0.485, 0.456, 0.406])
+        img = img.detach().cpu().numpy()
+        img = np.clip(img, 0, 1)
+        img = (img * 255).astype(np.uint8)
+        return img
+
     def collate_fn(self, batch):
         with h5py.File(self.lr_hdf5_file, 'r') as lr_file, h5py.File(self.hr_hdf5_file, 'r') as hr_file:
             lr_imgs = [self.lr_transform(np.array(lr_file[key])) for key in batch]
