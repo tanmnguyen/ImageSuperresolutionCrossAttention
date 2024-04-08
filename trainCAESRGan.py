@@ -58,7 +58,7 @@ def main(args):
         shuffle=False,
     )
 
-    gen = Generator(noRRDBBlock=7).to(configs.device)
+    gen = Generator(noRRDBBlock=9).to(configs.device)
     disc = Discriminator().to(configs.device)
 
     logging(f'Generator:\n {gen}', log_file)
@@ -69,15 +69,24 @@ def main(args):
 
     gen_optimizer = optim.Adam(gen.parameters(),lr=0.0002)
     disc_optimizer = optim.Adam(disc.parameters(),lr=0.0002)
+    gen_scheduler = optim.lr_scheduler.StepLR(gen_optimizer, step_size=2, gamma=0.85)
+    disc_scheduler = optim.lr_scheduler.StepLR(disc_optimizer, step_size=2, gamma=0.85)
 
     train_history, valid_history, opt_gen_loss = [], [], float('inf')
     for epoch in range(configs.epochs):
+        # print learning rate for both generator and discriminator using optimizer
+        logging(f'Generator Learning Rate: {gen_optimizer.param_groups[0]["lr"]}', log_file)
+        logging(f'Discriminator Learning Rate: {disc_optimizer.param_groups[0]["lr"]}', log_file)
+
         train_history.append(train_net(train_dataloader, gen_optimizer, disc_optimizer, vgg, disc, gen, log_file))
         train_disc_loss, train_gen_loss = train_history[-1]['disc_loss'], train_history[-1]['gen_loss']
         logging(
             f'[Train] Epoch: {epoch + 1}/{configs.epochs} | Disc Loss: {train_disc_loss} | Gen Loss: {train_gen_loss}',
             log_file
         )
+
+        gen_scheduler.step()
+        disc_scheduler.step()
 
         # save models each epoch 
         epoch_dir = os.path.join(result_dir, f'epoch_{epoch}')
