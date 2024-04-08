@@ -9,8 +9,9 @@ from .CrossAttention import CrossAttention
 from .ResidualInResidualDenseBlock import ResidualInResidualDenseBlock
 
 class CrossAttnEncoder(nn.Module):
-    def __init__(self, in_channel, noRRDBBlock, latent_dim, strides):
+    def __init__(self, in_channel, noRRDBBlock, latent_dim, strides, pivot_layer):
         super().__init__()
+        self.pivot_layer = pivot_layer
         self.conv1 = nn.Conv2d(in_channel, latent_dim, 3, 1, 1)
 
         self.RRDB_layers = [ResidualInResidualDenseBlock(stride=strides[i]).to(configs.device) for i in range(noRRDBBlock)]
@@ -24,7 +25,7 @@ class CrossAttnEncoder(nn.Module):
         self.cross_attns = [CrossAttention(dims[0], dims[i+1], latent_dim).to(configs.device) for i in range(len(dims) - 1)]
 
         self.conv_layers = nn.Sequential(
-            nn.Conv2d(latent_dim * (len(strides) - 1), latent_dim, 1),
+            nn.Conv2d(latent_dim * (len(strides) - self.pivot_layer - 1), latent_dim, 1),
             nn.LeakyReLU(0.2),
             nn.Conv2d(latent_dim, latent_dim, 3, 1, 1)
         )
@@ -40,8 +41,8 @@ class CrossAttnEncoder(nn.Module):
 
         # cross attention between features map 0 with 1, 2, 3...
         cross_attn_output = [] 
-        for i in range(len(self.cross_attns)):
-            cross_attn_output.append(self.cross_attns[i](RRDB_layer_output[0], RRDB_layer_output[i+1]))
+        for i in range(self.pivot_layer, len(self.cross_attns)):
+            cross_attn_output.append(self.cross_attns[i](RRDB_layer_output[self.pivot_layer], RRDB_layer_output[i+1]))
 
         # stack the cross attention output along the channel dimension 
         cross_attn_output = torch.cat(cross_attn_output, dim=1)

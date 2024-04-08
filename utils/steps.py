@@ -24,7 +24,7 @@ def train_net(train_dataloader, gen_optimizer, disc_optimizer, vgg, disc, gen, l
         epoch_gen += gen_loss.detach().cpu()
 
         if i % 100 == 0:
-            logging(f"Discriminator Loss: {disc_loss / (i + 1)} | Generator Loss: {gen_loss / (i + 1)}", log_file)
+            logging(f"Discriminator Loss: {epoch_disc / (i + 1)} | Generator Loss: {epoch_gen / (i + 1)}", log_file)
 
     return {
         "disc_loss": epoch_disc / len(train_dataloader),

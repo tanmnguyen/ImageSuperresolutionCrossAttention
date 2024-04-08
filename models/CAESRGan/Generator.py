@@ -9,9 +9,15 @@ class Generator(nn.Module):
     def __init__(self,in_channel = 3, out_channel = 3, latent_dim=64, noRRDBBlock = 23):
         super().__init__()   
         # encoder 
-        # set strides to 1 except for the last 4 layers 
-        strides = [1] * (noRRDBBlock - 4) + [2, 2, 2, 2]
-        self.cross_attn_encoder = CrossAttnEncoder(in_channel, noRRDBBlock, latent_dim, strides=strides)
+        # set strides to 1 except for the last 2 layers 
+        strides = [1] * (noRRDBBlock - 2) + [2, 2]
+        self.cross_attn_encoder = CrossAttnEncoder(
+            in_channel, 
+            noRRDBBlock, 
+            latent_dim, 
+            strides=strides,
+            pivot_layer=noRRDBBlock - 3,
+        )
 
         # upsampler 
         # self.upsample1 = UpsamplePixShuffle(2, latent_dim, latent_dim)
