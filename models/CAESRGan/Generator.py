@@ -16,7 +16,7 @@ class Generator(nn.Module):
             noRRDBBlock, 
             latent_dim, 
             strides=strides,
-            pivot_layer=noRRDBBlock - 3,
+            pivot_layer=noRRDBBlock - 4,
         )
 
         # upsampler 
