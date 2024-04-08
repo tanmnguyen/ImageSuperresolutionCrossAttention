@@ -8,10 +8,13 @@ class Discriminator(nn.Module):
         super().__init__()
 
         self.resnet = resnet18(ResNet18_Weights.DEFAULT)
-        self.resnet.fc = nn.Linear(2048, 1)
+        self.resnet.fc = nn.Linear(512, 1)
+        self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
-        return torch.sigmoid(self.resnet(x))
+        x = self.resnet(x)
+        x = self.sigmoid(x)
+        return x
     
 # class Discriminator(nn.Module):
 #     def __init__(self):
