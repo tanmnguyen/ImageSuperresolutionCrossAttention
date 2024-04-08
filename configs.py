@@ -1,7 +1,7 @@
 import torch 
 
 # training configuration file 
-batch_size = 8
+batch_size = 12
 hr_width = 256
 hr_height = 256
 epochs = 30
