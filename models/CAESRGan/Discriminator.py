@@ -1,13 +1,13 @@
 import torch 
 import torch.nn as nn
 import torch.nn.functional as F
-from torchvision.models.resnet import resnet50, ResNet50_Weights
+from torchvision.models.resnet import resnet18, ResNet18_Weights
 
 class Discriminator(nn.Module):
     def __init__(self):
         super().__init__()
 
-        self.resnet = resnet50(ResNet50_Weights.DEFAULT)
+        self.resnet = resnet18(ResNet18_Weights.DEFAULT)
         self.resnet.fc = nn.Linear(2048, 1)
 
     def forward(self, x):
