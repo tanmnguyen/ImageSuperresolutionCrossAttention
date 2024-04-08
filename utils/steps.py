@@ -10,7 +10,7 @@ def train_net(train_dataloader, gen_optimizer, disc_optimizer, vgg, disc, gen, l
     gen.train()
 
     epoch_disc, epoch_gen = 0.0, 0.0
-    for i, lr_img, hr_img in tqdm(enumerate(train_dataloader)):
+    for i, (lr_img, hr_img) in tqdm(enumerate(train_dataloader)):
         disc_loss, gen_loss = Losses().calculateLossWithGrad(
             disc_optimizer=disc_optimizer, 
             gen_optimizer=gen_optimizer, 
