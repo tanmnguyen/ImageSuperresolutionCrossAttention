@@ -9,7 +9,7 @@ class UpsamplePixShuffle(nn.Module):
     
     def forward(self, x):
         x = self.conv1(x)
-        x = self.relu(x)
+        # x = self.relu(x)
         x = self.pixel_shuffle(x)
         return x
         
