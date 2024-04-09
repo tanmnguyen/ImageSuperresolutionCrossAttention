@@ -14,6 +14,7 @@ class Discriminator(nn.Module):
     def forward(self, x):
         x = self.resnet(x)
         x = self.sigmoid(x)
+
         return x
     
 # class Discriminator(nn.Module):

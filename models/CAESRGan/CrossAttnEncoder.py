@@ -25,7 +25,7 @@ class CrossAttnEncoder(nn.Module):
         self.cross_attns = [CrossAttention(dims[0], dims[i+1], latent_dim).to(configs.device) for i in range(len(dims) - 1)]
 
         self.conv_layers = nn.Sequential(
-            nn.Conv2d(latent_dim * (len(strides) - self.pivot_layer - 1), latent_dim, 1),
+            nn.Conv2d(latent_dim * (len(strides) - self.pivot_layer - 1), latent_dim, 3, 1, 1),
             nn.LeakyReLU(0.2),
             nn.Conv2d(latent_dim, latent_dim, 3, 1, 1)
         )

@@ -8,7 +8,7 @@ class UpsampleInterpolate(nn.Module):
         self.upconv = nn.Conv2d(in_channels, out_channels, 3, 1, 1)
     
     def forward(self, x):
-        x = F.interpolate(x, scale_factor = self.upscale_factor)
+        x = F.interpolate(x, scale_factor = self.upscale_factor, mode='nearest')
         x = self.upconv(x)
 
         return x
