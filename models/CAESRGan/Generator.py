@@ -26,8 +26,8 @@ class Generator(nn.Module):
         )
 
         # upsampler 
-        self.upsample1 = UpsamplePixShuffle(2, latent_dim, latent_dim)
-        # self.upsample2 = UpsampleInterpolate(2, latent_dim, latent_dim)
+        # self.upsample1 = UpsamplePixShuffle(2, latent_dim, latent_dim)
+        self.upsample1 = UpsampleInterpolate(2, latent_dim, latent_dim)
         # self.upsample2 = UpsampleInterpolate(2, latent_dim, latent_dim)
         self.upsample2 = UpsamplePixShuffle(2, latent_dim, latent_dim)
 

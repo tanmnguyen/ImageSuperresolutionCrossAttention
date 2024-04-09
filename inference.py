@@ -4,7 +4,7 @@ import torch
 import argparse
 
 from utils.batch import BatchHandler
-from models.ESRGan.Generator import Generator
+
 
 
 def inference(batch_handler, model, img):
@@ -22,9 +22,15 @@ def main(args):
     batch_handler = BatchHandler(None, None)
 
     # loader generator model 
-    model = Generator(noRRDBBlock=7)
-    model.load_state_dict(torch.load(args.weight, map_location=torch.device('cpu')))
-
+    try:
+        from models.ESRGan.Generator import Generator
+        model = Generator(noRRDBBlock=7)
+        model.load_state_dict(torch.load(args.weight, map_location=torch.device('cpu')))
+    except:
+        from models.CAESRGan.Generator import Generator
+        model = Generator(noRRDBBlock=9)
+        model.load_state_dict(torch.load(args.weight, map_location=torch.device('cpu')))
+    
     # read image 
     with h5py.File(args.hdf5, 'r') as f:
         for key in f.keys():
