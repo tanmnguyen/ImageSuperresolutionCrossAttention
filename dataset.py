@@ -10,6 +10,7 @@ class ImageSuperResDataset(Dataset):
             self.keys = set(lr_f.keys()) & set(hr_f.keys())
 
     def __len__(self):
+        return 100
         return len(self.keys)
     
     def __getitem__(self, idx):

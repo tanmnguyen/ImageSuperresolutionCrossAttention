@@ -48,7 +48,7 @@ class Losses():
         generator_loss.backward()
         gen_optimizer.step()
 
-        return d_loss,generator_loss
+        return d_loss,generator_loss, fake_data, real_data
     
     def calculateLoss(self, vgg, discriminator, generator, LR_image, HR_image):
         generated_output = generator(LR_image.to(configs.device).float())
@@ -75,4 +75,4 @@ class Losses():
         m_loss = self.mse_loss(generated_output,real_data)
         generator_loss = self.lamda * g_loss + v_loss + self.eeta * m_loss
 
-        return d_loss,generator_loss
+        return d_loss,generator_loss, fake_data, real_data

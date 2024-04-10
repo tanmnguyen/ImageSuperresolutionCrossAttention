@@ -72,10 +72,10 @@ def main(args):
 
     train_history, valid_history, opt_gen_loss = [], [], float('inf')
     for epoch in range(configs.epochs):
-        train_history.append(train_net(train_dataloader, gen_optimizer, disc_optimizer, vgg, disc, gen, log_file))
-        train_disc_loss, train_gen_loss = train_history[-1]['disc_loss'], train_history[-1]['gen_loss']
+        train_history.append(train_net(train_dataloader, gen_optimizer, disc_optimizer, vgg, disc, gen, log_file, epoch))
+        train_disc_loss, train_gen_loss, PSNR = train_history[-1]['disc_loss'], train_history[-1]['gen_loss'], train_history[-1]['psnr']
         logging(
-            f'[Train] Epoch: {epoch + 1}/{configs.epochs} | Disc Loss: {train_disc_loss} | Gen Loss: {train_gen_loss}',
+            f'[Train] Epoch: {epoch + 1}/{configs.epochs} | Disc Loss: {train_disc_loss} | Gen Loss: {train_gen_loss} | PSNR: {PSNR}\n',
             log_file
         )
 

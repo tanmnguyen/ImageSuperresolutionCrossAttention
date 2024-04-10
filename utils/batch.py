@@ -15,19 +15,19 @@ class BatchHandler():
 
         self.hr_transform = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+            transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]) # normalize between -1 and 1
         ])
 
         self.lr_transform = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+            transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]) # normalize between -1 and 1
         ])
 
     def detransform(self, img):
         # this function take only 1 image at the time 
         img = img.squeeze(0)
         img = img.permute(1, 2, 0)
-        img = img * torch.tensor([0.229, 0.224, 0.225]) + torch.tensor([0.485, 0.456, 0.406])
+        img = img * torch.tensor([0.5, 0.5, 0.5]) + torch.tensor([0.5, 0.5, 0.5])
         img = img.detach().cpu().numpy()
         img = np.clip(img, 0, 1)
         img = (img * 255).astype(np.uint8)

@@ -16,3 +16,8 @@ This command line creates `train.hdf5` and `valid.hdf5` file
 ```bash 
 CUDA_VISIBLE_DEVICES=1 python trainCAESRGan.py --data dataset/DIV2k
 ```
+
+## Inference 
+```bash 
+python inference.py --hdf5 /Volumes/TanSSDT7/Columbia\ University/computer\ vision\ 2/dataset/DIV2k/lr_valid.hdf5 --weight /Users/tan/Desktop/ImageSuperresolutionCrossAttention/weights/gen_ep4.pth
+```
