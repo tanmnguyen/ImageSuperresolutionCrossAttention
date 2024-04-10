@@ -47,11 +47,11 @@ class Generator(nn.Module):
         # upconv_block2 = self.upsample2(upconv_block1)
 
         up1 = self.upsample_pxshuffl1(RRDB_full_block)
-        up2 = self.upsample_interpol1(up1)
+        up2 = self.upsample_interpol1(RRDB_full_block)
         x = up1 + up2 
 
         up3 = self.upsample_pxshuffl2(x)
-        up4 = self.upsample_interpol2(up3)
+        up4 = self.upsample_interpol2(x)
         x = up3 + up4
 
         out = self.out_conv(x)
