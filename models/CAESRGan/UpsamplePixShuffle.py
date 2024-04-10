@@ -22,9 +22,11 @@ class UpsamplePixShuffle(nn.Module):
         weight = ICNR(self.conv1.weight, initializer=nn.init.kaiming_normal_,
               upscale_factor=upscale_factor)
         self.conv1.weight.data.copy_(weight)
+        self.prelu = nn.PReLU()
     
     def forward(self, x):
         x = self.conv1(x)
         x = self.pixel_shuffle(x)
+        x = self.prelu(x)
         return x
         

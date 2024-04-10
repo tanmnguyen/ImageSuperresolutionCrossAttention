@@ -27,10 +27,10 @@ class Generator(nn.Module):
 
         # upsampler 
         self.upsample_pxshuffl1 = UpsamplePixShuffle(2, latent_dim, latent_dim)
-        self.upsample_interpol1 = UpsampleInterpolate(2, latent_dim, latent_dim)
+        # self.upsample_interpol1 = UpsampleInterpolate(2, latent_dim, latent_dim)
 
         self.upsample_pxshuffl2 = UpsamplePixShuffle(2, latent_dim, latent_dim)
-        self.upsample_interpol2 = UpsampleInterpolate(2, latent_dim, latent_dim)
+        # self.upsample_interpol2 = UpsampleInterpolate(2, latent_dim, latent_dim)
 
         # self.upsample1 = UpsampleInterpolate(2, latent_dim, latent_dim)
         # self.upsample2 = UpsampleInterpolate(2, latent_dim, latent_dim)
@@ -41,18 +41,21 @@ class Generator(nn.Module):
     def forward(self, x):
         # encode features 
         RRDB_full_block = self.cross_attn_encoder(x)
-
+        
+        x = self.upsample_pxshuffl1(RRDB_full_block)
+        x = self.upsample_pxshuffl2(x)
+        
         # upsample features
         # upconv_block1 = self.upsample1(RRDB_full_block)
         # upconv_block2 = self.upsample2(upconv_block1)
 
-        up1 = self.upsample_pxshuffl1(RRDB_full_block)
-        up2 = self.upsample_interpol1(RRDB_full_block)
-        x = up1 + up2 
+        # up1 = self.upsample_pxshuffl1(RRDB_full_block)
+        # up2 = self.upsample_interpol1(RRDB_full_block)
+        # x = up1 + up2 
 
-        up3 = self.upsample_pxshuffl2(x)
-        up4 = self.upsample_interpol2(x)
-        x = up3 + up4
+        # up3 = self.upsample_pxshuffl2(x)
+        # up4 = self.upsample_interpol2(x)
+        # x = up3 + up4
 
         out = self.out_conv(x)
 
