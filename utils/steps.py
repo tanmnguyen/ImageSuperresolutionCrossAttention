@@ -33,7 +33,7 @@ def train_net(train_dataloader, gen_optimizer, disc_optimizer, vgg, disc, gen, l
             logging(
                 f"Epoch: {epoch} | Step: {i} | " + \
                 f"Discriminator Loss: {epoch_disc / (i + 1)} " + \
-                f"| Generator Loss: {epoch_gen / (i + 1)} + " + \
+                f"| Generator Loss: {epoch_gen / (i + 1)} " + \
                 f"| PSNR: {epoch_psnr / (i + 1)}", log_file)
 
     return {
