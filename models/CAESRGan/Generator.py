@@ -32,7 +32,7 @@ class Generator(nn.Module):
         self.out_conv = nn.Sequential(
             # nn.Conv2d(latent_dim, out_channel, 3, 1, 1),
             # nn.PReLU(),
-            nn.Conv2d(out_channel, out_channel, 3, 1, 1)
+            nn.Conv2d(out_channel, 3, 3, 1, 1)
         )
     
     def forward(self, x):
