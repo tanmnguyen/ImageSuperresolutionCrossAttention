@@ -26,20 +26,28 @@ class Generator(nn.Module):
         )
 
         # upsampler 
-        self.upsample_interpol1 = UpsampleInterpolate(2, latent_dim, latent_dim)
-        self.upsample_interpol2 = UpsampleInterpolate(2, latent_dim, latent_dim)
+        # self.upsample_interpol1 = UpsampleInterpolate(2, latent_dim, latent_dim)
+        # self.upsample_interpol2 = UpsampleInterpolate(2, latent_dim, latent_dim)
+
+        self.upsample = nn.Sequential(
+            UpsamplePixShuffle(2, latent_dim, latent_dim),
+            UpsamplePixShuffle(2, latent_dim, latent_dim),
+            # UpsampleInterpolate(2, latent_dim, latent_dim),
+            # UpsampleInterpolate(2, latent_dim, latent_dim)
+        )
 
         self.out_conv = nn.Sequential(
             nn.Conv2d(latent_dim, out_channel, 3, 1, 1),
             nn.PReLU(),
-            nn.Conv2d(out_channel, 3, 3, 1, 1)
+            nn.Conv2d(latent_dim, 3, 3, 1, 1)
         )
     
     def forward(self, x):
         # encode features 
         ca_x = self.cross_attn_encoder(x)
-        x = self.upsample_interpol1(ca_x)
-        x = self.upsample_interpol2(x)
+       
+        # upsample features
+        x = self.upsample(ca_x)
 
         out = self.out_conv(x)
 
