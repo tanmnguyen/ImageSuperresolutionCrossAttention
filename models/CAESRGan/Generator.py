@@ -25,20 +25,14 @@ class Generator(nn.Module):
             pivot_layer=noRRDBBlock - len(backward_strides) - 1,
         )
 
-        # upsampler 
-        # self.upsample_interpol1 = UpsampleInterpolate(2, latent_dim, latent_dim)
-        # self.upsample_interpol2 = UpsampleInterpolate(2, latent_dim, latent_dim)
-
         self.upsample = nn.Sequential(
-            UpsamplePixShuffle(2, latent_dim, latent_dim),
-            UpsamplePixShuffle(2, latent_dim, latent_dim),
-            # UpsampleInterpolate(2, latent_dim, latent_dim),
-            # UpsampleInterpolate(2, latent_dim, latent_dim)
+            # UpsamplePixShuffle(2, latent_dim, latent_dim),
+            # UpsamplePixShuffle(2, latent_dim, latent_dim),
+            UpsampleInterpolate(2, latent_dim, latent_dim),
+            UpsampleInterpolate(2, latent_dim, latent_dim)
         )
 
         self.out_conv = nn.Sequential(
-            nn.Conv2d(latent_dim, out_channel, 3, 1, 1),
-            nn.PReLU(),
             nn.Conv2d(latent_dim, 3, 3, 1, 1)
         )
     
