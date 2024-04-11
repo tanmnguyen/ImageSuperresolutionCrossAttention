@@ -13,6 +13,9 @@ python preparedata.py --data dataset/DIV2k
 This command line creates `train.hdf5` and `valid.hdf5` file 
 
 ## Train model 
+```bash
+CUDA_VISIBLE_DEVICES=3 python trainESRGan.py --data dataset/DIV2k
+```
 ```bash 
 CUDA_VISIBLE_DEVICES=3 python trainCAESRGan.py --data dataset/DIV2k
 ```
