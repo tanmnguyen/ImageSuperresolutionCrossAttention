@@ -30,8 +30,8 @@ class Generator(nn.Module):
         self.upsample_interpol2 = UpsampleInterpolate(2, latent_dim, latent_dim)
 
         self.out_conv = nn.Sequential(
-            # nn.Conv2d(latent_dim, out_channel, 3, 1, 1),
-            # nn.PReLU(),
+            nn.Conv2d(latent_dim, out_channel, 3, 1, 1),
+            nn.PReLU(),
             nn.Conv2d(latent_dim, 3, 3, 1, 1)
         )
     
