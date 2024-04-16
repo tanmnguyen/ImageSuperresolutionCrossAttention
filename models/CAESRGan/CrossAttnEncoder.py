@@ -18,7 +18,7 @@ class CrossAttnEncoder(nn.Module):
         super().__init__()
         self.pivot_layer = pivot_layer 
         self.conv_first = nn.Conv2d(in_nc, nf, 3, 1, 1, bias=True)
-        self.RRDB_trunk = [RRDB(nf=nf, gc=gc, stride=strides[i]) for i in range(nb).to(configs.device)]
+        self.RRDB_trunk = [RRDB(nf=nf, gc=gc, stride=strides[i]).to(configs.device) for i in range(nb)]
 
         cumulative_strides = strides 
         for i in range(1, len(strides)):
