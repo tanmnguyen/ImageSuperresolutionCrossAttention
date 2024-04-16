@@ -2,16 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torchvision.models.resnet import resnet50, ResNet50_Weights
-
-# class Discriminator(nn.Module):
-#     def __init__(self):
-#         super().__init__()
-
-#         self.resnet = resnet50(ResNet50_Weights.DEFAULT)
-#         self.resnet.fc = nn.Linear(2048, 1)
-
-#     def forward(self, x):
-#         return torch.sigmoid(self.resnet(x))
     
 class ConvBlock(nn.Module):
     def __init__(self, in_channels, out_channels, use_act, kernel_size=3, stride=1, padding=1):
