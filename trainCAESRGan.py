@@ -58,7 +58,7 @@ def main(args):
         shuffle=False,
     )
 
-    gen = Generator(3, 3, 64, 10, gc=32).to(configs.device)
+    gen = Generator(3, 3, 64, 5, gc=32).to(configs.device)
     disc = Discriminator().to(configs.device)
 
     logging(f'Generator:\n {gen}', log_file)
