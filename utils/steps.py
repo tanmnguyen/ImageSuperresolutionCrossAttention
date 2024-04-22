@@ -59,7 +59,7 @@ def valid_net(valid_dataloader, vgg, disc, gen):
             epoch_disc += disc_loss.detach().cpu()
             epoch_gen += gen_loss.detach().cpu()
 
-            psnr = psnr(fake_data, real_data)
+            psnr = PSNR_fn(fake_data, real_data)
             epoch_psnr += psnr.item()
 
     return {

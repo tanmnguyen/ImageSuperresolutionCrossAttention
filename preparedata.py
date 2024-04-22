@@ -93,7 +93,7 @@ if __name__ == '__main__':
     parser.add_argument('-stride',
                         '--stride',
                         type=int,
-                        default=128,
+                        default=256,
                         required=False,
                         help="Stride factor for the cropped images. Default is 128.")
     

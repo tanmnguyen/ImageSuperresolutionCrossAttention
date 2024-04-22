@@ -21,7 +21,6 @@ class ConvBlock(nn.Module):
 class Discriminator(nn.Module):
     def __init__(self, in_channels=3, features=(64, 64, 128, 128, 256, 256, 512, 512)):
         super().__init__()
-
         self.in_channels = in_channels
         self.features = list(features)
 
