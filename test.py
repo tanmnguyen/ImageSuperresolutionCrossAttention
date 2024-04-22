@@ -13,6 +13,7 @@ from utils.general import get_time, count_params
 from utils.io import logging
 from utils.metrics.quality import PSNR_fn
 from models.ESRGan.VGG import vgg
+from tqdm import tqdm 
 
 # format time to print month day year hour minute second
 result_dir = os.path.join(configs.result_dir, f'{get_time()}')
@@ -65,7 +66,10 @@ def main(args):
         print("Validating", epoch_folder)
 
         avg_pnsr = 0.0
-        for i, (lr_img, hr_img) in enumerate(valid_dataloader):
+        for i, (lr_img, hr_img) in enumerate(tqdm(valid_dataloader)):
+            lr_img = lr_img.to(configs.device)
+            hr_img = hr_img.to(configs.device)
+
             with torch.no_grad():
                 fake_data = gen_model(lr_img)
                 # compute PSNR
