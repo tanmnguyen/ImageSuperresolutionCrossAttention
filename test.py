@@ -1,19 +1,15 @@
 import os
-import time 
 import torch 
 import configs 
 import argparse 
-import torch.optim as optim
 
+from tqdm import tqdm 
+from utils.general import get_time
+from utils.networks import load_gen_from_ckpt
 from utils.batch import BatchHandler
 from torch.utils.data import DataLoader
 from dataset import ImageSuperResDataset
-from utils.steps import train_net, valid_net
-from utils.general import get_time, count_params
-from utils.io import logging
 from utils.metrics.quality import PSNR_fn
-from models.ESRGan.VGG import vgg
-from tqdm import tqdm 
 
 # format time to print month day year hour minute second
 result_dir = os.path.join(configs.result_dir, f'{get_time()}')
@@ -21,24 +17,6 @@ os.makedirs(result_dir, exist_ok=True)
 
 # define log file 
 log_file = os.path.join(result_dir, 'log.txt')
-
-
-def load_gen(epoch_folder):
-    epoch_dir = os.path.join(args.checkpoint, epoch_folder)
-    files = os.listdir(epoch_dir)
-    for file in files:
-        if file.startswith('gen'):
-            try:
-                # load state dict 
-                from models.ESRGan.Generator import Generator
-                gen = Generator(3, 3, 64, 23, gc=32).to(configs.device)
-                gen.load_state_dict(torch.load(os.path.join(epoch_dir, file), map_location=configs.device))
-            except:
-                from models.CAESRGan.Generator import Generator
-                gen = Generator(3, 3, 64, 5, gc=32).to(configs.device)
-                gen.load_state_dict(torch.load(os.path.join(epoch_dir, file), map_location=configs.device))
-            # return generator
-            return gen 
 
 def main(args):
     valid_dataset = ImageSuperResDataset(
@@ -62,7 +40,7 @@ def main(args):
     epoch_folders = [folder for folder in os.listdir(args.checkpoint) if folder.startswith('epoch_')]
     epoch_folders.sort(key=lambda x: int(x.split('_')[-1]))
     for epoch_folder in epoch_folders:
-        gen_model = load_gen(epoch_folder)
+        gen_model = load_gen_from_ckpt(args.checkpoint, epoch_folder)
         print("Validating", epoch_folder)
 
         avg_pnsr = 0.0
